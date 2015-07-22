@@ -1,0 +1,19 @@
+extends layout
+block content
+    a(href="/things") Back to list
+    br
+    br
+    p
+        | You can delete things here.
+    br
+    form.form(method="POST")
+        div.form-group
+            label(for="thing_name") Name
+            input.form-control#thing_name(name="name")
+            
+            
+        div
+            button.btn.btn-primary#deleteform(type="submit")
+                | Delete
+                
+        br

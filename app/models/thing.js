@@ -6,9 +6,5 @@ var thingSchema = mongoose.Schema({
 
 var Thing = mongoose.model("thing", thingSchema);
 
-// function ThingTests() {
-//     console.log("Hi");
-// }
 
 module.exports = Thing;
-// module.exports = ThingTests;

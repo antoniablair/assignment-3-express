@@ -1,0 +1,9 @@
+.alert.alert-danger.blank {
+  display: none;
+  margin-top: 10px;
+}
+
+.alert.alert-danger.alreadyexists {
+  display: none;
+  margin-top: 10px;
+}

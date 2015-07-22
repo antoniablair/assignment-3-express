@@ -33,16 +33,6 @@ app.use(function(req, res, next){
     next(); 
 });
 
-// app.use(function(req,res, next){
-// 	console.log("flash middleware")
-// 	res.locals({
-// 		session	: req.session,
-// 		flash	: req.flash()
-// 	});
-// });
-
-// app.use(flash());
-
 
 app.get("/", function(req, res){
    res.render("index", {
@@ -74,22 +64,64 @@ app.get("/things", function(req, res){
     });
 });
 
-app.post("/things/new", function(req, res){
-   var thing = new Thing(req.body); 
-   if (req.body.name) {
-    thing.save()
-        .then(function(){
-        res.redirect("/things"); 
+app.post("/things/new", function(req, res, next){
+  var thing = new Thing(req.body);
+  var key = thing.name;
+  console.log("-------");
+    if (req.body.name) {
+        Thing.find({ name: thing.name }, function (err, thing) {
+            if (err) {
+            return res.send(500, 'An error has occurred!');
+            }
+            else if (thing.length!=0) {
+            console.log(key + " already exists in the database");
+            // return res.render('thing_new', {'errors': key });
+            return res.send(500, 'That name exists already! Please try again.');
+            }
+            else {
+            var thing = new Thing(req.body);    
+            console.log("Successfully added.");
+            thing.save()
+                .then(function(){
+                    res.redirect("/things");
+                });
+            }
         });
     }
     else {
-        alert('Your thing needs a name!');
+        return res.send(500, 'Please choose a name!');
     }
-});
-
-// app.use(function(req, res, next) {
-//     res.locals.messages = req.flash();
-// });
+  });
+  
+  
+app.post("/things/delete", function(req, res, next){
+  var thing = new Thing(req.body);
+  console.log("-------");
+    if (req.body.name) {
+        Thing.find({ name: thing.name }, function (err, thing) {
+            if (err) {
+            return res.send(500, 'An error has occurred!');
+            }
+            else if (thing.length==0) {
+            console.log(thing.name + " does not exist in the database.");
+            // return res.render('thing_new', {'errors': key });
+            return res.send(500, 'That Thing is not found in the database.');
+            }
+            else {
+            var thing = new Thing(req.body);
+            Thing.remove(
+            { name: thing.name })
+                .then(function(){
+                    res.redirect("/things");
+                });
+            }
+        });
+    }
+    else {
+        return res.send(500, 'Please enter a legitimate Thing!');
+    }
+  });
+  
 
 app.post("/things/:id", function(req, res){
     Thing.update(
@@ -100,12 +132,27 @@ app.post("/things/:id", function(req, res){
     });
 });
 
+// app.post('/error', function(req,res){
+//     var thing = new Thing(req.body.name);
+//     Thing.remove(
+//         {name: thing.name}
+//     ).then(function(){
+//         res.redirect("/things"); 
+//     });
+// });
+
 app.get("/things/new", function(req, res){
     res.render("thing_new", {
         activePath: "/things",
         title: "Insert a New Thing"
     });
-    
+});
+
+app.get("/things/delete", function(req, res){
+    res.render("thing_delete", {
+        activePath: "/things",
+        title: "Delete a Thing"
+    });
 });
 
 app.get("/things/:id", function(req, res){

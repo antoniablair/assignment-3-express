@@ -3,12 +3,25 @@ block content
     a(href="/things") Back to list
     h1 
         =thing.name
+    
+    br
+    p
+        | Change the name of your thing here. 
+    br
     form.form(method="POST")
         div.form-group
             label(for="thing_name") Name
-            input.form-control#thing_name(name="name" value=thing.name)
+            input.form-control#thing_name(name="name" value=thing.name todo="add")
         div
             button.btn.btn-primary(type="submit")
                 | Save
+                
+    // form.form(method="POST")
+    //     input.form-control#thing_name(type="hidden" name="name" value=thing.name todo="delete")
+
+    div
+        a(href="/things/delete" data-prefill=thing.name)
+            | Delete
+        
         
                 

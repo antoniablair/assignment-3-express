@@ -1,7 +1,13 @@
 extends layout
 block content
-    a(href="/things/new") 
-        | Create a new thing
+    a(href="/things/new")
+        .h4
+            | Create a new thing
+    a(href="/things/delete")
+        .h4
+            | Delete a thing
+    br
+    br
     ul
         each thing in things
             li 
@@ -11,5 +17,4 @@ block content
     if things.length == 0
         .alert.alert-danger
             | There are no things!
-    
-    if things
+        

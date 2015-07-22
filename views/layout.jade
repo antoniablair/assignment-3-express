@@ -2,7 +2,10 @@ html
     head
         title 
             =title
+        script(src="/vendor/jquery/dist/jquery.min.js")    
         link(href="/vendor/bootstrap/dist/css/bootstrap.min.css", rel="stylesheet")
+        link(href="/css/common.css", rel="stylesheet")
+        script(src="/js/common.js")
     body
         ul.nav.nav-tabs
             each tab in tabs
@@ -14,3 +17,4 @@ html
                 h1 
                     =title
             block content
+            

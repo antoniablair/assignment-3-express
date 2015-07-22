@@ -1,12 +1,26 @@
 extends layout
 block content
     a(href="/things") Back to list
+    br
+    br
+    p
+        | You can add new things here. Please use only unique items.
+    
+    
     form.form(method="POST")
         div.form-group
             label(for="thing_name") Name
             input.form-control#thing_name(name="name")
+            
+            
         div
             button.btn.btn-primary(type="submit")
                 | Save
-        
                 
+        br
+        
+        // if errors: 
+        //     .alert.alert-danger
+        //         button.close(type='button' data-dismiss='alert' onclick='removeerrors()') &times;
+        //         | There was an error submitting that Thing. Please try again.
+            
