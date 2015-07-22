@@ -1,8 +1,11 @@
 var express = require("express");
+var session = require('express-session');
 var Tab = require("./app/tab");
 var db = require("./app/config/db");
 var Thing = require("./app/models/thing");
 var bodyParser = require("body-parser");
+
+// var flash = require('connect-flash');
 
 db.connect()
     .then(function(){
@@ -30,6 +33,16 @@ app.use(function(req, res, next){
     next(); 
 });
 
+// app.use(function(req,res, next){
+// 	console.log("flash middleware")
+// 	res.locals({
+// 		session	: req.session,
+// 		flash	: req.flash()
+// 	});
+// });
+
+// app.use(flash());
+
 
 app.get("/", function(req, res){
    res.render("index", {
@@ -37,6 +50,14 @@ app.get("/", function(req, res){
        activePath: "/"
    });
 });
+
+app.get("/error", function(req, res){
+    res.render("error", {
+        activePath: "/error",
+        title: "Something doesn't look right."
+    });
+});
+
 app.get("/people", function(req, res){
    res.render("people", {
        title: "People",
@@ -55,11 +76,20 @@ app.get("/things", function(req, res){
 
 app.post("/things/new", function(req, res){
    var thing = new Thing(req.body); 
-   thing.save()
-    .then(function(){
-       res.redirect("/things"); 
-    });
+   if (req.body.name) {
+    thing.save()
+        .then(function(){
+        res.redirect("/things"); 
+        });
+    }
+    else {
+        alert('Your thing needs a name!');
+    }
 });
+
+// app.use(function(req, res, next) {
+//     res.locals.messages = req.flash();
+// });
 
 app.post("/things/:id", function(req, res){
     Thing.update(
@@ -77,6 +107,7 @@ app.get("/things/new", function(req, res){
     });
     
 });
+
 app.get("/things/:id", function(req, res){
     Thing.findById(req.params.id)
         .then(function(thing){
